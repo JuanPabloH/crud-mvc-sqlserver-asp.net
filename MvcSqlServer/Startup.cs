@@ -40,7 +40,7 @@ namespace MvcSqlServer
             //    options =>options.UseInMemoryDatabase(databaseName:"testDb")
             //);
             //Servicio para SQLSERVER
-            string connString= ConfigurationExtensions.GetConnectionString(this.Configuration,"DefaultConnection");
+            string connString= ConfigurationExtensions.GetConnectionString(this.Configuration,"DefaultConnectionString");
             services.AddDbContext<ContextCrud>(options =>options.UseSqlServer(connString));
         }
 
