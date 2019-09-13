@@ -1,0 +1,54 @@
+Cadena de conex SQLSERVER
+
+Server=localhost\SQLEXPRESS;Database=master;Trusted_Connection=True;
+Server=localhost\SQLEXPRESS01;Database=master;Trusted_Connection=True;
+
+Abrir sqlcmd
+links:
+http://elpaladintecnologico.blogspot.com/2009/12/acceder-y-manipular-datos-de-sql-server.html
+https://mariadb.com/kb/es/basic-sql-statements/
+https://www.ramoncarrasco.es/es/content/es/kb/73/crear-campo-autoincremental-en-sql-server
+
+sqlcmd -S Miservidor\nombredeinstancia
+iniciar y parar servicio sql server
+net start "SQL Server (SQLEXPRESS)"
+net stop "SQL Server (SQLEXPRESS)"
+
+Crear usuario
+1. net start "SQL Server (SQLEXPRESS)" /m
+2. osql -S localhost\SQLEXPRESS -E
+3. 	1> CREATE LOGIN admin WITH PASSWORD='12345';
+	2> ALTER SERVER ROLE sysadmin ADD MEMBER admin;
+	3> go
+
+
+CRUD .NET
+-Crear modelo
+-Agregar paquete EF.SqlServer
+dotnet add package Microsfot.entityFrameWorkCore.SqlServer
+
+o
+
+dotnet add package Microsoft.EntityFrameworkCore.InMemory
+-Crear Contexto de la BD
+-Agregar Servicio StartUp.cs
+SQLServer
+string connString= ConfigurationExtensions.GetConnectionString(this.Configuration,"DefaultConnection");
+services.AddDbContext<ContextCrud>(options =>options.UseSqlServer(connString));
+
+InMemory
+
+
+-Agregar cadena de conexion a appsettings.dev
+"ConnectionStrings":{
+    "DefaultConnectionString":"Server=localhost\\SQLEXPRESS;Database=prueba;Trusted_Connection=True;"
+  }
+-Scaffolding
+dotnet tool install -g dotnet-aspnet-codegenerator
+
+dotnet add package Microsoft.VisualStudio.Web.CodeGeneration.Design
+
+dotnet restore
+
+dotnet aspnet-codegenerator controller -name PersonController -m Person -dc ContextCrud --relativeFolderPath Controllers --useDefaultLayout --re
+ferenceScriptLibraries -f
